@@ -5,12 +5,14 @@ import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.batch.item.ExecutionContext;
 import com.duoc.business.Venta;
 
 @Component
+@StepScope
 public class VentasItemReader implements ItemReader<Venta>, ItemStream {
 
     private final FlatFileItemReader<Venta> delegate; // El lector delegado

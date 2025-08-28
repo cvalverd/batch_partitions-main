@@ -1,9 +1,11 @@
 package com.duoc.items;
 
-import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.file.FlatFileHeaderCallback;
+import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +15,12 @@ import java.io.IOException;
 import java.io.Writer;
 
 @Component
+@StepScope
 public class VentasItemWriter extends FlatFileItemWriter<InformeVenta> {
 
-    public VentasItemWriter() {
-        setResource(new FileSystemResource("output.csv")); // Define el archivo de salida de los informes
-        setAppendAllowed(true);
+    public VentasItemWriter(@Value("#{stepExecutionContext['partitionName']}") String partitionName) {
+        setResource(new FileSystemResource("output-" + partitionName + ".csv")); // Archivo de salida por partición
+        setAppendAllowed(false);
 
         // Configura el encabezado del archivo
         setHeaderCallback(new FlatFileHeaderCallback() {
@@ -37,5 +40,4 @@ public class VentasItemWriter extends FlatFileItemWriter<InformeVenta> {
         lineAggregator.setFieldExtractor(fieldExtractor); // Configura el agregador de líneas con el extractor
         setLineAggregator(lineAggregator); // Asigna el agregador de líneas al escritor
     }
-
 }
