@@ -5,8 +5,8 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.support.JdbcTransactionManager;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 
 /**
  * Configuración de la fuente de datos y el manejador de transacciones para la aplicación.
@@ -23,10 +23,13 @@ public class DataSourceConfiguration {
      */
     @Bean
     public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-            .setType(EmbeddedDatabaseType.H2) // Define la base de datos embebida como H2
-            .addScript("schema-all.sql") // Carga el script para el esquema de la base de datos
-            .build();
+       DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+            dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
+            dataSource.setUrl("jdbc:oracle:thin:@n72bzhzwyzgte7oh_tp?TNS_ADMIN=/Wallet_N72BZHZWYZGTE7OH");
+            dataSource.setUsername("springbatch");
+            dataSource.setPassword("ClaseBackend3-");
+            return dataSource;
     }
 
     /**
